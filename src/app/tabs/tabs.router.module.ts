@@ -38,12 +38,33 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'tab3',
+        path: 'perfilGames/:id',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+              import('../pages/perfil-games/perfil-games.module').then(m => m.PerfilGamesPageModule)
+          }
+        ]
+      },
+      {
+        path: 'listGames',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/list-games/list-games.module').then(m => m.ListGamesPageModule)
+          }
+        ]
+      },
+     
+      {
+        path: 'addGames',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../pages/add-games/add-games.module').then(m => m.AddGamesPageModule)
           }
         ]
       },

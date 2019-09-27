@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Games</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #fc="ngForm" (ngSubmit) = "onsubmit(fc)">
+    <ion-item>
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input type="text" [(ngModel)] = "games.nome" name ="nome" required></ion-input>
+      </ion-item>
+     
+      <ion-item>
+          <ion-label position="floating">Categoria</ion-label>
+          <ion-input type="text" [(ngModel)]="games.categoria" name="categoria" required></ion-input>
+        </ion-item>
+        
+        <ion-item>
+            <ion-label position="floating">Console</ion-label>
+            <ion-input type="text" [(ngModel)]="games.console" name="console" required></ion-input>          
+          </ion-item>
+
+          <ion-item>
+              <ion-label position="floating">Descrição</ion-label>
+              <ion-input type="text" [(ngModel)]="games.descricao" name="descricao" required></ion-input>             
+            </ion-item>           
+
+            <ion-item>
+              <ion-label position="floating">Quantidade</ion-label>
+              <ion-input type="number" [(ngModel)]="games.quant" name="quant" required #quant="ngModel"></ion-input>             
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Valor</ion-label>
+              <ion-input type="number" [(ngModel)]="games.valor" name="valor" required #valor="ngModel"></ion-input>             
+            </ion-item>
+
+              <ion-item lines="none">
+              <ion-button slot="end" type="submit" color="primary">Salvar</ion-button>
+              <ion-button slot="end" type="reset" color="danger">Cancelar</ion-button>
+              </ion-item>
+</form>
+</ion-content>
