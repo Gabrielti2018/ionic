@@ -1,6 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Cadastro do player</ion-title>
+    <ion-title *ngIf="!id">Cadastro do player</ion-title>
+    <ion-title *ngIf="id">Atualizar do player</ion-title>    
   </ion-toolbar>
 </ion-header>
 
@@ -37,5 +38,10 @@
               <ion-button slot="end" type="submit" color="primary" [disabled]="fc.invalid || (pws.value != conf.value)">Salvar</ion-button>
               <ion-button slot="end" type="reset" color="danger">Cancelar</ion-button>
               </ion-item>
+
+              <ion-item lines="none" *ngIf="id">
+                  <ion-button slot="end" type="submit" color="primary" [disabled]="fc.invalid || (pws.value != conf.value)">Atualizar</ion-button>
+                  <ion-button slot="end" type="reset" color="danger">Cancelar</ion-button>
+                  </ion-item>
 </form>
 </ion-content>
