@@ -4,12 +4,12 @@
 
 export const environment = {
   production: false,
-  firebaseConfig: {
+  firebaseConfig:{
     apiKey: "AIzaSyAz9K_YsG-YEv1-ZuKGxYKDkPNtG99LhNY",
     authDomain: "sharegames-60def.firebaseapp.com",
     databaseURL: "https://sharegames-60def.firebaseio.com",
     projectId: "sharegames-60def",
-    storageBucket: "",
+    storageBucket: "sharegames-60def.appspot.com",
     messagingSenderId: "252531551158",
     appId: "1:252531551158:web:c0e03bed9460ae11802f17"
   }
