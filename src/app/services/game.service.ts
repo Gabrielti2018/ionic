@@ -21,6 +21,7 @@ export class GameService {
         console: game.console,
         quant: game.quant,
         valor: game.valor,
+        foto: game.foto,
         ativo: game.ativo
       });
   }
