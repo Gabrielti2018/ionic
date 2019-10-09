@@ -97,6 +97,16 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'addGame/:id',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../pages/add-game/add-game.module').then(m => m.AddGamePageModule)
+          }
+        ]
+      },
+      
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full'

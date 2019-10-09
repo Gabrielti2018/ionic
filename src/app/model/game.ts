@@ -5,6 +5,7 @@ export class Game {
     console: string; 
     descricao: string; 
     quant: number; 
-    valor: number; 
+    valor: number;
+    foto: string = null; 
     ativo: boolean = true;
 }
