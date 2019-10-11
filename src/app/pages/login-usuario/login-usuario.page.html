@@ -8,7 +8,7 @@
   <form #fc="ngForm" (ngSubmit)="onsubmit(fc)">
     <ion-item>
       <ion-label position="floating">E-mail</ion-label>
-      <ion-input type="email" name="email" [(ngModel)]="email" #e="ngModel" required></ion-input>
+      <ion-input type="email" name="email" [(ngModel)]="email" #e="ngModel" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"></ion-input>
     </ion-item>
     <ion-text color="danger" *ngIf="e.invalid && e.dirty">
         <strong>E-mail invalido!</strong>
