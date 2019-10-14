@@ -21,8 +21,10 @@ export class GameService {
         console: game.console,
         quant: game.quant,
         valor: game.valor,
-        foto: game.foto,
-        ativo: game.ativo
+        ativo: game.ativo,
+        fotos: game.fotos,
+        lat: game.lat,
+        lng: game.lng
       });
   }
 
@@ -38,6 +40,7 @@ export class GameService {
   get(id) {
     return this.fire.collection("games").doc<Game>(id).valueChanges();
   }
+
   update(game: Game, id: string) {
     return this.fire.collection("games").doc<Game>(id)
       .update(game);

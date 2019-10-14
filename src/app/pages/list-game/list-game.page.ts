@@ -1,7 +1,7 @@
+import { AlertController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { GameService } from 'src/app/services/game.service';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-list-game',
@@ -14,12 +14,16 @@ export class ListGamePage implements OnInit {
 
   constructor(
     protected gameService: GameService,
-    private router: Router,
+    protected router: Router,
     protected alertController: AlertController
   ) { }
 
   ngOnInit() {
-    this.refreshGames();
+    this.gameService.gelAll().subscribe(
+      res => {
+        this.games = res;
+      }
+    )
   }
 
   editar(game) {
@@ -30,7 +34,7 @@ export class ListGamePage implements OnInit {
     //console.log('Begin async operation');
     this.gameService.gelAll().subscribe(
       res => {
-         this.games = res;
+        this.games = res;
         setTimeout(() => {
           //console.log('Async operation has ended');
           event.target.complete();
@@ -38,6 +42,38 @@ export class ListGamePage implements OnInit {
       }
     );
   }
+
+  async apagar(game) {
+    const alert = await this.alertController.create({
+      header: 'Apagar dados!',
+      message: 'Apagar todos os dados do game',
+      buttons: [
+        {
+          text: 'Não',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Sim',
+          handler: () => {
+            this.gameService.remove(game).then(
+              res => {
+                this.presentAlert("Aviso", "Apagado com sucesso!");
+                this.refreshGames();
+              },
+              erro => {
+                this.presentAlert("Erro", "Ao apagar o item!");
+              }
+            )
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   refreshGames() {
     this.gameService.gelAll().subscribe(
       res => {
@@ -45,48 +81,15 @@ export class ListGamePage implements OnInit {
       }
     )
   }
-    //Alerts-------------------
-    async presentAlert(tipo: string, texto: string) {
-      const alert = await this.alertController.create({
-        header: tipo,
-        //subHeader: 'Subtitle',
-        message: texto,
-        buttons: ['OK']
-      });
-      await alert.present();
-    }
-  
-    async apagar(game) {
-      const alert = await this.alertController.create({
-        header: 'Apagar dados!',
-        message: 'Apagar todos os dados do Game',
-        buttons: [
-          {
-            text: 'Não',
-            role: 'cancel',
-            cssClass: 'secondary',
-            handler: (blah) => {
-              console.log('Confirm Cancel: blah');
-            }
-          }, {
-            text: 'Sim',
-            handler: () => {
-              this.gameService.remove(game).then(
-                res => {
-                  this.presentAlert("Aviso", "Apagado com sucesso!");
-                  this.refreshGames();
-                },
-                erro => {
-                  this.presentAlert("Erro", "Ao apagar o item!");
-                }
-              )
-            }
-          }
-        ]
-      });
-      await alert.present();
-    }
+
+  //Alerts-------------------
+  async presentAlert(tipo: string, texto: string) {
+    const alert = await this.alertController.create({
+      header: tipo,
+      //subHeader: 'Subtitle',
+      message: texto,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
 }
-
-
-

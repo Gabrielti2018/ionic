@@ -1,6 +1,6 @@
+import { GameService } from 'src/app/services/game.service';
 import { Component } from '@angular/core';
 import { PlayerService } from '../services/player.service';
-import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-tabs',
@@ -20,7 +20,7 @@ export class TabsPage {
       res=>{
         this.quantPlayer = res.length
       }
-    ),
+    )
     this.gameService.gelAll().subscribe(
       res=>{
         this.quantGame = res.length

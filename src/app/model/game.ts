@@ -5,7 +5,9 @@ export class Game {
     console: string; 
     descricao: string; 
     quant: number; 
-    valor: number;
-    foto: string = null; 
+    valor: number; 
     ativo: boolean = true;
+    fotos:string[] = [];
+    lat:number;
+    lng:number;
 }
