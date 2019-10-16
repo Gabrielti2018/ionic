@@ -22,6 +22,8 @@ import { GooglePlus } from '@ionic-native/google-plus/ngx';
 //--device
 import { Device } from '@ionic-native/device/ngx';
 
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -34,7 +36,7 @@ import { Device } from '@ionic-native/device/ngx';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Geolocation,GooglePlus,Device
+    Geolocation,GooglePlus,Device,AndroidPermissions
   ],
   bootstrap: [AppComponent]
 })
