@@ -11,8 +11,9 @@ import {
   GoogleMap,
   GoogleMapsEvent,
   Marker,
-
-  MarkerCluster
+  MarkerCluster,
+  MyLocation,
+  LocationService
 } from '@ionic-native/google-maps';
 
 
@@ -36,11 +37,12 @@ export class AddPlayerPage implements OnInit {
     protected activedRoute: ActivatedRoute,
     protected router: Router,
     private camera: Camera,
-    private geolocation: Geolocation, 
+    private geolocation: Geolocation,
     private platform: Platform
   ) { }
 
   async ngOnInit() {
+    this.localAtual();
     await this.platform.ready();
     await this.loadMap();
 
@@ -136,6 +138,7 @@ export class AddPlayerPage implements OnInit {
     });
     await alert.present();
   }
+  //google maps
   loadMap() {
     this.map = GoogleMaps.create('map_canvas', {
       'camera': {
@@ -143,10 +146,53 @@ export class AddPlayerPage implements OnInit {
           "lat": this.player.lat,
           "lng": this.player.lng,
         },
-        'zoom': 10
+        'zoom': 15
       }
     });
     //this.addCluster(this.dummyData());
+    this.minhaLocalizacao()
+  }
+  minhaLocalizacao() {
+    LocationService.getMyLocation().then(
+      (myLocation: MyLocation) => {
+        this.map.setOptions({
+          camera: {
+            target: myLocation.latLng
+          }
+
+        })
+        //adiciona marcador do mapa
+        let marker: Marker = this.map.addMarkerSync({
+          position:{
+            lat:myLocation.latLng.lat,
+            lng:myLocation.latLng.lng
+          },
+        icon:"#00ff00",
+        title:"Titulo",
+        snippet:"comentario"
+        })
+        //adicionar eventos no mapa
+        this.map.on(GoogleMapsEvent.MARKER_CLICK).subscribe(
+          res=>{
+            marker.setTitle(this.player.nome)
+            marker.setSnippet(this.player.nickname)
+            marker.showInfoWindow()
+          }
+        )
+        //colocar pontos extras
+        this.map.on(GoogleMapsEvent.MARKER_CLICK).subscribe(
+          res=>{
+            console.log(res)
+            this.map.addMarker({
+              position:{
+                lat:res.LatLng.lat,
+                lng:res.LatLng.lng
+              }
+            })
+          }
+        )
+      }
+    );
   }
 
 }
