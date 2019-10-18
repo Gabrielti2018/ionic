@@ -185,8 +185,8 @@ export class AddPlayerPage implements OnInit {
             console.log(res)
             this.map.addMarker({
               position:{
-                lat:res.LatLng.lat,
-                lng:res.LatLng.lng
+                lat:res[0].lat,
+                lng:res[0].lng
               }
             })
           }
