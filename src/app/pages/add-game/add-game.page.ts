@@ -1,10 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Game } from 'src/app/model/game';
 import { GameService } from 'src/app/services/game.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+
+import {
+  GoogleMaps,
+  GoogleMap,
+  GoogleMapsEvent,
+  Marker,
+  MarkerCluster,
+  MyLocation,
+  LocationService
+} from '@ionic-native/google-maps';
 
 @Component({
   selector: 'app-add-game',
@@ -19,6 +29,8 @@ export class AddGamePage implements OnInit {
   protected posLat: number = 0;
   protected posLng: number = 0;
 
+  protected map: GoogleMap;
+
   slideOpts = {
     initialSlide: 1,
     slidesPerView: 3,
@@ -31,10 +43,20 @@ export class AddGamePage implements OnInit {
     protected activedRoute: ActivatedRoute,
     protected router: Router,
     private camera: Camera,
-    private geolocation: Geolocation
+    private geolocation: Geolocation,
+    private platform: Platform
   ) { }
 
-  ngOnInit() {
+
+
+
+  async ngOnInit() {
+    //Localização atual
+    await this.localAtual();
+    //Plataforma e GoogleMaps
+    await this.platform.ready();
+    await this.loadMap();
+
     this.id = this.activedRoute.snapshot.paramMap.get("id");
     if (this.id) {
       this.gameService.get(this.id).subscribe(
@@ -50,7 +72,7 @@ export class AddGamePage implements OnInit {
   }
 
   onsubmit(form) {
-    if (!this.preview) {
+    if (this.preview) {
       this.presentAlert("Erro", "Deve inserir uma foto do perfil!");
     } else {
       this.game.fotos = this.preview;
@@ -157,5 +179,63 @@ export class AddGamePage implements OnInit {
       buttons: ['OK']
     });
     await alert.present();
+  }
+
+  //Google Maps -------------------------
+  loadMap() {
+    this.map = GoogleMaps.create('map_canvas', {
+      'camera': {
+        'target': {
+          "lat": this.posLat,
+          "lng": this.posLng
+        },
+        'zoom': 15
+      }
+    });
+    //this.addCluster(this.dummyData());
+    this.minhaLocalizacao()
+  }
+  
+
+  minhaLocalizacao() {
+    LocationService.getMyLocation().then(
+      (myLocation: MyLocation) => {
+        this.map.setOptions({
+          camera: {
+            target: myLocation.latLng
+          }
+        })
+        //adicionar marcador no Mapa
+        let marker: Marker = this.map.addMarkerSync({
+          position: {
+            lat: myLocation.latLng.lat,
+            lng: myLocation.latLng.lng
+          },
+          icon: "#00ff00",
+          title: "Titulo",
+          snippet: "Comentário"
+        })
+        //adicionar eventos no mapa
+        marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(
+          res => {
+            marker.setTitle(this.game.nome)
+            marker.setSnippet(this.game.descricao)
+            marker.showInfoWindow()
+          }
+        )
+        //colocar pontos extras
+        this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
+          res => {
+            console.log(res)
+            this.map.addMarker({
+              position: {
+                lat: res[0].lat,
+                lng: res[0].lng
+              }
+            })
+          }
+        )
+      }
+    );
   }
 }
